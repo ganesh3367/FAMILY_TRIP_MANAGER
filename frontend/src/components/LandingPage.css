@@ -1,0 +1,250 @@
+.landing-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0 4rem;
+    background-color: var(--background);
+}
+
+.landing-nav {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 4rem !important;
+    border-radius: 5rem !important;
+}
+
+.logo {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+}
+
+.hero {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 12rem 0;
+}
+
+.badge {
+    background: #e5f1ff;
+    color: var(--primary);
+    padding: 0.5rem 1.25rem;
+    border-radius: 2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    width: fit-content;
+    margin: 0 auto 2rem;
+}
+
+.hero-title {
+    font-size: 6rem;
+    line-height: 1.05;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    letter-spacing: -0.05em;
+    color: var(--text);
+}
+
+.hero-subtitle {
+    font-size: 1.6rem;
+    color: var(--text-muted);
+    max-width: 800px;
+    margin: 0 auto 4rem;
+    line-height: 1.5;
+}
+
+.hero-btn {
+    padding: 1.5rem 4rem !important;
+    font-size: 1.25rem !important;
+}
+
+.stats-section {
+    padding-bottom: 8rem;
+}
+
+.stats-grid {
+    display: flex;
+    justify-content: center;
+    gap: 8rem;
+}
+
+.stat-item h2 {
+    font-size: 3.5rem;
+    letter-spacing: -0.05em;
+}
+
+.stat-item p {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 6rem;
+}
+
+.section-title {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1.1;
+}
+
+.features-section {
+    padding: 12rem 4rem;
+    background: white;
+    margin: 0 -4rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    text-align: left;
+    padding: 4rem !important;
+    background: #fbfbfd !important;
+}
+
+.feature-icon {
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+}
+
+.feature-card h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.workflow-section {
+    padding: 12rem 0;
+}
+
+.workflow-card {
+    padding: 6rem !important;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.workflow-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    margin-top: 6rem;
+}
+
+.step {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+}
+
+.step-number {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--primary);
+    opacity: 0.15;
+}
+
+.step h4 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.cta-section {
+    padding: 10rem 0;
+}
+
+.cta-card {
+    padding: 8rem !important;
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: var(--primary) !important;
+    color: white !important;
+}
+
+.cta-card h2 {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+}
+
+.cta-card p {
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+}
+
+.cta-card .btn-primary {
+    background: white;
+    color: var(--primary);
+    font-size: 1.4rem !important;
+    padding: 1.5rem 4rem !important;
+}
+
+.landing-footer {
+    padding: 6rem 0;
+    text-align: center;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 2rem;
+}
+
+.footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .landing-container {
+        padding: 0 1.5rem;
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        flex-direction: column;
+        gap: 4rem;
+    }
+
+    .hero {
+        padding: 8rem 0;
+    }
+}
+
+.hero-bg-blur {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-bg-blur::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 60%;
+    height: 140%;
+    background: radial-gradient(circle, rgba(0, 113, 227, 0.08) 0%, transparent 70%);
+    filter: blur(80px);
+    z-index: -1;
+}
