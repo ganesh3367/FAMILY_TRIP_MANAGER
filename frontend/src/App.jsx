@@ -15,6 +15,8 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+
   // Load all journeys on mount
   useEffect(() => {
     fetchTrips();
@@ -22,10 +24,10 @@ const App = () => {
 
   const fetchTrips = async () => {
     try {
-      const response = await fetch('http://localhost:5001/api/trips');
+      const response = await fetch(`${API_BASE_URL}/api/trips`);
       if (!response.ok) throw new Error('Could not connect to database');
       const data = await response.json();
-      setTrips(data);
+      setTrips(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
       setError('System offline. Please ensure the local server is running.');
@@ -39,7 +41,7 @@ const App = () => {
     if (!window.confirm("Are you sure you want to delete this journey? All related data will be lost.")) return;
 
     try {
-      const response = await fetch(`http://localhost:5001/api/trips/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/trips/${id}`, {
         method: 'DELETE'
       });
       if (!response.ok) throw new Error('Delete failed');
@@ -191,7 +193,7 @@ function AddTripModal({ onClose, onSuccess }) {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:5001/api/trips', {
+      const response = await fetch(`${API_BASE_URL}/api/trips`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

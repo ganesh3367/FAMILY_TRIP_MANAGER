@@ -31,6 +31,7 @@ const TripDetail = ({ trip, onBack }) => {
         expenses: []
     });
     const [isAdding, setIsAdding] = useState(null);
+    const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
     const mapsKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const { isLoaded } = useJsApiLoader({
@@ -49,7 +50,7 @@ const TripDetail = ({ trip, onBack }) => {
 
         try {
             await Promise.all(sections.map(async (key) => {
-                let url = `http://localhost:5001/api/${key}`;
+                let url = `${API_BASE_URL}/api/${key}`;
                 // Special mapping for tripId query param
                 if (key === 'destinations' || key === 'activities' || key === 'expenses') {
                     url += `/${trip._id}`;
@@ -57,7 +58,8 @@ const TripDetail = ({ trip, onBack }) => {
                     url += `/trip/${trip._id}`;
                 }
                 const res = await fetch(url);
-                results[key] = await res.json();
+                const fetchedData = await res.json();
+                results[key] = Array.isArray(fetchedData) ? fetchedData : [];
             }));
             setData({
                 destinations: results.destinations || [],
@@ -83,7 +85,7 @@ const TripDetail = ({ trip, onBack }) => {
         if (!window.confirm("Delete this entire journey? This action cannot be undone.")) return;
 
         try {
-            const res = await fetch(`http://localhost:5001/api/trips/${trip._id}`, {
+            const res = await fetch(`${API_BASE_URL}/api/trips/${trip._id}`, {
                 method: 'DELETE'
             });
             if (!res.ok) throw new Error('Delete failed');
@@ -240,7 +242,9 @@ const TripDetail = ({ trip, onBack }) => {
                                     data.activities.map(act => (
                                         <div key={act._id} className="timeline-item">
                                             <div className="time-col">
-                                                <div className="day">5 Jan</div>
+                                                <div className="day">
+                                                    {act.date ? new Date(act.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'Anytime'}
+                                                </div>
                                                 <div className="slot">{act.timeSlot}</div>
                                             </div>
                                             <div className="content-card">
@@ -408,12 +412,13 @@ const AddForm = ({ type, tripId, isLoaded, onClose, onSuccess }) => {
         setError(null);
 
         // Map simplified types to collection names
-        let endpoint = type === 'todo' ? 'todos' : type === 'expense' ? 'expenses' : type + 's';
+        let endpoint = type === 'todo' ? 'todos' : type === 'expense' ? 'expenses' : type;
         if (type === 'activity') endpoint = 'activities';
+        if (type === 'stay') endpoint = 'stays';
         if (type === 'dest') endpoint = 'destinations';
 
         try {
-            const res = await fetch(`http://localhost:5001/api/${endpoint}`, {
+            const res = await fetch(`${API_BASE_URL}/api/${endpoint}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ tripId, ...formData })

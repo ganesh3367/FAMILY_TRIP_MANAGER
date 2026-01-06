@@ -10,15 +10,6 @@
       "createdAt": "2026-01-04T05:13:47.649Z"
     },
     {
-      "title": "Ujjain",
-      "description": "Ujjain trip",
-      "startDate": "2026-01-04",
-      "endDate": "2026-01-06",
-      "budget": "30000",
-      "_id": "1767503768245",
-      "createdAt": "2026-01-04T05:16:08.245Z"
-    },
-    {
       "title": "Pune",
       "description": "Family trip ",
       "startDate": "2026-01-04",
@@ -35,6 +26,24 @@
       "budget": "10000",
       "_id": "1767518252029",
       "createdAt": "2026-01-04T09:17:32.029Z"
+    },
+    {
+      "title": "Neww",
+      "description": "These are better",
+      "startDate": "2026-01-06",
+      "endDate": "2026-01-29",
+      "budget": "10000",
+      "_id": "1767697839743",
+      "createdAt": "2026-01-06T11:10:39.744Z"
+    },
+    {
+      "title": "Neww",
+      "description": " Thh",
+      "startDate": "2026-01-06",
+      "endDate": "2026-01-14",
+      "budget": "100",
+      "_id": "1767705131809",
+      "createdAt": "2026-01-06T13:12:11.809Z"
     }
   ],
   "destinations": [],
