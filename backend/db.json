@@ -1,0 +1,172 @@
+{
+  "trips": [
+    {
+      "title": "n",
+      "description": "n",
+      "startDate": "2026-01-04",
+      "endDate": "2026-01-05",
+      "budget": "1",
+      "_id": "1767503627649",
+      "createdAt": "2026-01-04T05:13:47.649Z"
+    },
+    {
+      "title": "Ujjain",
+      "description": "Ujjain trip",
+      "startDate": "2026-01-04",
+      "endDate": "2026-01-06",
+      "budget": "30000",
+      "_id": "1767503768245",
+      "createdAt": "2026-01-04T05:16:08.245Z"
+    },
+    {
+      "title": "Pune",
+      "description": "Family trip ",
+      "startDate": "2026-01-04",
+      "endDate": "2026-01-06",
+      "budget": "5000",
+      "_id": "1767504274648",
+      "createdAt": "2026-01-04T05:24:34.648Z"
+    },
+    {
+      "title": "Goa",
+      "description": "Goa journey",
+      "startDate": "2026-01-04",
+      "endDate": "2026-01-07",
+      "budget": "10000",
+      "_id": "1767518252029",
+      "createdAt": "2026-01-04T09:17:32.029Z"
+    }
+  ],
+  "destinations": [],
+  "transport": [],
+  "stays": [
+    {
+      "tripId": "1767503627649",
+      "type": "Flight",
+      "category": "General",
+      "priority": "medium",
+      "address": "Pune",
+      "cost": "500",
+      "name": "Nee",
+      "_id": "1767503660137",
+      "createdAt": "2026-01-04T05:14:20.137Z"
+    },
+    {
+      "tripId": "1767504274648",
+      "type": "Flight",
+      "category": "General",
+      "priority": "medium",
+      "address": "Punne",
+      "cost": "50",
+      "name": "HH",
+      "_id": "1767504377327",
+      "createdAt": "2026-01-04T05:26:17.327Z"
+    },
+    {
+      "tripId": "1767504274648",
+      "type": "Flight",
+      "category": "General",
+      "priority": "medium",
+      "name": "thh",
+      "address": "hh",
+      "checkIn": "2025-12-30",
+      "checkOut": "2026-01-06",
+      "cost": "44",
+      "_id": "1767506955530",
+      "createdAt": "2026-01-04T06:09:15.530Z"
+    },
+    {
+      "tripId": "1767504274648",
+      "type": "Flight",
+      "category": "General",
+      "priority": "medium",
+      "name": "thh",
+      "address": "hh",
+      "rating": "3",
+      "checkIn": "2026-01-04",
+      "checkOut": "2026-01-06",
+      "cost": "44",
+      "_id": "1767508196611",
+      "createdAt": "2026-01-04T06:29:56.611Z"
+    }
+  ],
+  "activities": [
+    {
+      "tripId": "1767503768245",
+      "type": "Flight",
+      "category": "General",
+      "priority": "medium",
+      "date": "2026-01-04",
+      "timeSlot": "3",
+      "title": "Travel",
+      "_id": "1767503793298",
+      "createdAt": "2026-01-04T05:16:33.298Z"
+    },
+    {
+      "tripId": "1767504274648",
+      "type": "Flight",
+      "category": "General",
+      "priority": "medium",
+      "date": "2026-01-05",
+      "timeSlot": "Boating",
+      "title": "Boating",
+      "_id": "1767504312260",
+      "createdAt": "2026-01-04T05:25:12.260Z"
+    },
+    {
+      "tripId": "1767504274648",
+      "type": "Flight",
+      "category": "General",
+      "priority": "high",
+      "location": "PUe\\ne",
+      "title": "N",
+      "_id": "1767505703895",
+      "createdAt": "2026-01-04T05:48:23.895Z"
+    },
+    {
+      "tripId": "1767518252029",
+      "type": "Flight",
+      "category": "General",
+      "priority": "medium",
+      "date": "2026-01-04",
+      "timeSlot": "eve",
+      "location": "jj",
+      "title": "jj",
+      "_id": "1767519108892",
+      "createdAt": "2026-01-04T09:31:48.892Z"
+    }
+  ],
+  "expenses": [
+    {
+      "tripId": "1767503627649",
+      "type": "Flight",
+      "category": "General",
+      "priority": "medium",
+      "amount": "50000",
+      "title": "Nn",
+      "_id": "1767503739813",
+      "createdAt": "2026-01-04T05:15:39.813Z"
+    },
+    {
+      "tripId": "1767504274648",
+      "type": "Flight",
+      "category": "General",
+      "priority": "medium",
+      "amount": "400",
+      "title": "Anyting",
+      "_id": "1767504296381",
+      "createdAt": "2026-01-04T05:24:56.381Z"
+    },
+    {
+      "tripId": "1767518252029",
+      "type": "Flight",
+      "category": "General",
+      "priority": "medium",
+      "title": "ggg",
+      "amount": "66",
+      "_id": "1767519092255",
+      "createdAt": "2026-01-04T09:31:32.255Z"
+    }
+  ],
+  "todos": []
+}

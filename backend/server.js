@@ -22,9 +22,15 @@ app.get('/', (req, res) => {
 });
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/family-trip-manager';
-mongoose.connect(MONGODB_URI)
-    .then(() => console.log('DB Connected'))
-    .catch(err => console.log('DB Connect Error:', err));
+
+global.isOfflineMode = false;
+
+mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 2000 })
+    .then(() => console.log('✅ MongoDB Connected'))
+    .catch(err => {
+        console.log('⚠️ MongoDB Offline. Switching to Local JSON Storage.');
+        global.isOfflineMode = true;
+    });
 
 app.listen(PORT, () => {
     console.log(`Live on port ${PORT}`);

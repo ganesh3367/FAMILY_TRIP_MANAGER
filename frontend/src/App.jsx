@@ -1,108 +1,156 @@
 import React, { useState, useEffect } from 'react';
+import { Calendar, DollarSign, Type, FileText, X, Plus, Trash2, ArrowRight } from 'lucide-react';
 import './App.css';
 import TripDetail from './components/TripDetail';
 import './components/TripDetail.css';
 import LandingPage from './components/LandingPage';
 import './components/LandingPage.css';
 
-function App() {
-  const [view, setView] = useState('landing');
+const App = () => {
+  const [view, setView] = useState('dashboard');
   const [trips, setTrips] = useState([]);
   const [activeTrip, setActiveTrip] = useState(null);
+  const [activeFilter, setActiveFilter] = useState('all');
   const [isAddingTrip, setIsAddingTrip] = useState(false);
-  const [filter, setFilter] = useState('all');
-  const [showArchived, setShowArchived] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Load all journeys on mount
   useEffect(() => {
-    if (view !== 'landing') loadTrips();
-  }, [view]);
+    fetchTrips();
+  }, []);
 
-  async function loadTrips() {
+  const fetchTrips = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/trips');
-      if (!res.ok) throw new Error('Database connection failed');
-      const data = await res.json();
+      const response = await fetch('http://localhost:5001/api/trips');
+      if (!response.ok) throw new Error('Could not connect to database');
+      const data = await response.json();
       setTrips(data);
-      setError(null);
     } catch (err) {
-      setError('System offline. Ensure database is connected.');
+      console.error(err);
+      setError('System offline. Please ensure the local server is running.');
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
-  const filtered = trips.filter(t => {
-    const statusMatch = filter === 'all' || t.status === filter;
-    const archiveMatch = showArchived ? t.isArchived : !t.isArchived;
-    return statusMatch && archiveMatch;
-  });
+  const handleDeleteTrip = async (id, e) => {
+    e.stopPropagation(); // Prevent navigating to detail view
+    if (!window.confirm("Are you sure you want to delete this journey? All related data will be lost.")) return;
+
+    try {
+      const response = await fetch(`http://localhost:5001/api/trips/${id}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) throw new Error('Delete failed');
+      fetchTrips(); // Refresh the list
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete trip. Please try again.");
+    }
+  };
+
+  // Periodic check if previous fetch failed
+  useEffect(() => {
+    if (error) {
+      const interval = setInterval(fetchTrips, 10000);
+      return () => clearInterval(interval);
+    }
+  }, [error]);
+
+  const displayedTrips = trips.filter(trip =>
+    activeFilter === 'all' || trip.status === activeFilter
+  );
 
   return (
-    <div className="app-container">
-      <nav className="glass-nav">
-        <div className="nav-content">
-          <div className="brand" onClick={() => setView('landing')}>TripFlow</div>
-          <div className="nav-menu">
+    <div className="main-viewport">
+      <nav className="smart-nav">
+        <div className="nav-wrapper">
+          <div className="logo" onClick={() => setView('landing')}>TripFlow</div>
+          <div className="nav-links">
             {view === 'landing' ? (
               <>
-                <a href="#features" className="nav-item">Features</a>
-                <a href="#workflow" className="nav-item">Workflow</a>
-                <button className="nav-item active" onClick={() => setView('dashboard')}>Get Started</button>
+                <a href="#features" className="nav-link">Features</a>
+                <button className="nav-cta" onClick={() => setView('dashboard')}>Get Started</button>
               </>
             ) : (
               <>
-                <button className={`nav-item ${view === 'dashboard' ? 'active' : ''}`} onClick={() => setView('dashboard')}>Trips</button>
-                <button className="nav-item">Explore</button>
-                <button className={`nav-item ${view === 'detail' ? 'active' : ''}`}>Detail</button>
+                <button className={`nav-link ${view === 'dashboard' ? 'active' : ''}`} onClick={() => setView('dashboard')}>Timeline</button>
+                <button className="nav-link">Explore</button>
               </>
             )}
           </div>
         </div>
       </nav>
 
-      <main className="content-area">
-        {error && <div className="connection-error">{error}</div>}
+      <div className="content-container">
+        {error && <div className="system-notice warning">{error}</div>}
 
-        {view === 'landing' && (
-          <div className="landing-wrapper animate-fade-in-long">
-            <LandingPage onGetStarted={() => setView('dashboard')} />
-          </div>
-        )}
+        {view === 'landing' && <LandingPage onGetStarted={() => setView('dashboard')} />}
 
         {view === 'dashboard' && (
-          <div className="dashboard animate-fade-in">
-            <header className="page-header">
-              <h1>{showArchived ? 'Archive' : 'Active Trips'}</h1>
-              <div className="header-logic">
-                <button className="btn btn-secondary" onClick={() => setShowArchived(!showArchived)}>
-                  {showArchived ? 'Active' : 'Archived'}
-                </button>
-                <button className="btn btn-primary" onClick={() => setIsAddingTrip(true)}>Add Trip</button>
+          <div className="dashboard-view animate-fade">
+            <header className="dashboard-header">
+              <div className="header-copy">
+                <h1>My Journeys</h1>
+                <p>Plan, track, and enjoy your family adventures.</p>
               </div>
+              <button className="action-button primary" onClick={() => setIsAddingTrip(true)}>
+                <Plus size={18} />
+                New Journey
+              </button>
             </header>
 
-            <div className="filter-pills">
-              {['all', 'upcoming', 'ongoing', 'completed'].map(f => (
-                <button key={f} className={`pill ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
-                  {f.charAt(0).toUpperCase() + f.slice(1)}
+            <div className="filter-shelf">
+              {['all', 'upcoming', 'ongoing', 'completed'].map(category => (
+                <button
+                  key={category}
+                  className={`shelf-pill ${activeFilter === category ? 'selected' : ''}`}
+                  onClick={() => setActiveFilter(category)}
+                >
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
                 </button>
               ))}
             </div>
 
-            <div className="trip-grid">
-              {filtered.length === 0 ? (
-                <div className="empty-state">
-                  <h3>No journeys yet</h3>
-                  <p>Ready to start a new adventure?</p>
+            <div className="journeys-grid">
+              {displayedTrips.length === 0 ? (
+                <div className="empty-journeys">
+                  <div className="empty-visual">✨</div>
+                  <h2>Waitng for adventure</h2>
+                  <p>Your journey list is empty. Start by planning your first trip.</p>
+                  <button className="action-button secondary" onClick={() => setIsAddingTrip(true)}>Start Planning</button>
                 </div>
               ) : (
-                filtered.map(trip => (
-                  <div key={trip._id} className="trip-card glass-card" onClick={() => { setActiveTrip(trip); setView('detail'); }}>
+                displayedTrips.map(trip => (
+                  <div
+                    key={trip._id}
+                    className="journey-card"
+                    onClick={() => { setActiveTrip(trip); setView('detail'); }}
+                  >
                     <div className="card-top">
-                      <span className={`badge ${trip.status}`}>{trip.status}</span>
+                      <span className={`status-marker ${trip.status}`}>{trip.status}</span>
                     </div>
-                    <h3>{trip.title}</h3>
-                    <div className="card-footer">
-                      <span className="price-tag">${trip.budget}</span>
+
+                    <div className="card-body">
+                      <div className="date-range">
+                        {new Date(trip.startDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                        &nbsp;—&nbsp;
+                        {new Date(trip.endDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </div>
+                      <h3>{trip.title}</h3>
+                    </div>
+
+                    <div className="card-details">
+                      <div className="card-actions">
+                        <button className="delete-btn" title="Delete Journey" onClick={(e) => handleDeleteTrip(trip._id, e)}>
+                          <Trash2 size={16} />
+                        </button>
+                        <button className="view-details">
+                          View Details
+                          <ArrowRight size={16} />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))
@@ -112,16 +160,17 @@ function App() {
         )}
 
         {view === 'detail' && activeTrip && (
-          <TripDetail trip={activeTrip} onBack={() => { setView('dashboard'); loadTrips(); }} />
+          <TripDetail trip={activeTrip} onBack={() => { setView('dashboard'); fetchTrips(); }} />
         )}
-      </main>
+      </div>
 
       {isAddingTrip && (
-        <AddTripModal onClose={() => setIsAddingTrip(false)} onSuccess={() => { loadTrips(); setIsAddingTrip(false); }} />
+        <AddTripModal onClose={() => setIsAddingTrip(false)} onSuccess={() => { fetchTrips(); setIsAddingTrip(false); }} />
       )}
     </div>
   );
 }
+
 
 function AddTripModal({ onClose, onSuccess }) {
   const [formData, setFormData] = useState({
@@ -131,59 +180,112 @@ function AddTripModal({ onClose, onSuccess }) {
     endDate: '',
     budget: 0
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.title) return setError('A title is required for your journey.');
+
+    setLoading(true);
+    setError(null);
+
     try {
-      await fetch('http://localhost:5001/api/trips', {
+      const response = await fetch('http://localhost:5001/api/trips', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to save trip');
+      }
+
       onSuccess();
     } catch (err) {
-      console.error(err);
+      console.error('Save error:', err);
+      setError(err.message || 'Something went wrong while saving your journey.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="glass-card modal-content">
-        <h2>Plan New Trip</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            placeholder="Trip Title"
-            value={formData.title}
-            onChange={e => setFormData({ ...formData, title: e.target.value })}
-            required
-          />
-          <textarea
-            placeholder="Description"
-            value={formData.description}
-            onChange={e => setFormData({ ...formData, description: e.target.value })}
-          />
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="premium-modal animate-fade" onClick={e => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose}><X size={20} /></button>
+
+        <div className="modal-header">
+          <h2>Start New Journey</h2>
+          <p>Tell us about your upcoming adventure.</p>
+        </div>
+
+        {error && <div className="system-notice warning">{error}</div>}
+
+        <form onSubmit={handleSubmit} className="premium-form">
+          <div className="form-group">
+            <label>Trip Title</label>
+            <input
+              autoFocus
+              className="premium-input-large"
+              placeholder="e.g. Summer in Tokyo"
+              required
+              value={formData.title}
+              onChange={e => setFormData({ ...formData, title: e.target.value })}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Description</label>
+            <textarea
+              className="premium-input"
+              placeholder="Tell a bit about the purpose or theme..."
+              rows={3}
+              value={formData.description}
+              onChange={e => setFormData({ ...formData, description: e.target.value })}
+            />
+          </div>
+
           <div className="form-row">
+            <div className="form-group flex-1">
+              <label>Start date</label>
+              <input
+                type="date"
+                className="premium-input"
+                required
+                value={formData.startDate}
+                onChange={e => setFormData({ ...formData, startDate: e.target.value })}
+              />
+            </div>
+            <div className="form-group flex-1">
+              <label>End date</label>
+              <input
+                type="date"
+                className="premium-input"
+                required
+                value={formData.endDate}
+                onChange={e => setFormData({ ...formData, endDate: e.target.value })}
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>Estimated Budget ($)</label>
             <input
-              type="date"
-              value={formData.startDate}
-              onChange={e => setFormData({ ...formData, startDate: e.target.value })}
-            />
-            <input
-              type="date"
-              value={formData.endDate}
-              onChange={e => setFormData({ ...formData, endDate: e.target.value })}
+              type="number"
+              className="premium-input"
+              value={formData.budget}
+              onChange={e => setFormData({ ...formData, budget: e.target.value })}
             />
           </div>
-          <input
-            type="number"
-            placeholder="Budget"
-            value={formData.budget}
-            onChange={e => setFormData({ ...formData, budget: e.target.value })}
-          />
-          <div className="form-actions">
-            <button type="button" className="btn" onClick={onClose}>Cancel</button>
-            <button type="submit" className="btn btn-primary">Create Trip</button>
-          </div>
+
+          <footer className="modal-footer">
+            <button type="button" className="action-button secondary" onClick={onClose}>Discard</button>
+            <button type="submit" className="action-button primary" disabled={loading}>
+              {loading ? 'Creating...' : 'Create Trip'}
+            </button>
+          </footer>
         </form>
       </div>
     </div>

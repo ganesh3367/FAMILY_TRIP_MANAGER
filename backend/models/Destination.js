@@ -7,6 +7,11 @@ const destinationSchema = new mongoose.Schema({
     order: { type: Number, default: 0 },
     arrivalDate: Date,
     departureDate: Date,
+    lat: Number,
+    lng: Number,
+    origin: String,
+    distance: String,
+    duration: String,
     notes: String,
     createdAt: { type: Date, default: Date.now }
 });
